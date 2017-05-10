@@ -10,11 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170510154451) do
+ActiveRecord::Schema.define(version: 20170510175234) do
+
+  create_table "contents", force: :cascade do |t|
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "slides", force: :cascade do |t|
     t.string "title"
-    t.string "type"
+    t.string "slide_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

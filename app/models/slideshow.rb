@@ -1,4 +1,5 @@
 class Slideshow < ApplicationRecord
-  validates :title, presence: true
-  #title: string
+  has_many :slides, dependent: :destroy
+
+  validates_presence_of :title
 end
