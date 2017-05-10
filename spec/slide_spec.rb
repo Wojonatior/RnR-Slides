@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Slide, :type => :model do
-  subject { described_class.new(slide_type: "content", title: "sample title") }
 
   describe "Validations" do
     it "has a valid factory" do
@@ -21,7 +20,7 @@ RSpec.describe Slide, :type => :model do
   
   describe "Associations" do
     it { should belong_to(:slideshow) }
-    #it { should have_many(:contents) }
+    it { should have_many(:contents) }
   end
 end
 
