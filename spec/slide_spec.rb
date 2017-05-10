@@ -4,25 +4,24 @@ RSpec.describe Slide, :type => :model do
   subject { described_class.new(slide_type: "content", title: "sample title") }
 
   describe "Validations" do
-    it "is valid with valid attributes" do
-      expect(subject).to be_valid
+    it "has a valid factory" do
+      FactoryGirl.create(:slide).should be_valid
     end
 
     it "is invalid without a title" do
-      subject.title = nil
-      expect(subject).to_not be_valid
+      FactoryGirl.build(:slide, title: "").should_not be_valid
     end
 
     it "is invalid without a type" do
-      subject.slide_type = nil
-      expect(subject).to_not be_valid
+      FactoryGirl.build(:slide, slide_type: "").should_not be_valid
     end
 
     it "is invalid without an approved type"
   end
   
   describe "Associations" do
-    it "has one slideshow"
-    it "has many content"
+    it { should belong_to(:slideshow) }
+    #it { should have_many(:contents) }
   end
 end
+

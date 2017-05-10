@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170510175234) do
+ActiveRecord::Schema.define(version: 20170510190937) do
 
   create_table "contents", force: :cascade do |t|
     t.text "body"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 20170510175234) do
     t.string "slide_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "slideshow_id"
+    t.index ["slideshow_id"], name: "index_slides_on_slideshow_id"
   end
 
   create_table "slideshows", force: :cascade do |t|
