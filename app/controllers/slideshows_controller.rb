@@ -20,6 +20,10 @@ class SlideshowsController < ApplicationController
     head :no_content
   end
 
+  def destroy
+    @slideshow.destroy
+    head :no_content
+  end
 
   private
 

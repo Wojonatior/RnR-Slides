@@ -124,8 +124,29 @@ RSpec.describe 'Slideshows API', type: :request do
 
   describe 'DELETE' do
     describe '/slideshows/:id' do
+      before { delete "/slideshows/#{slideshow_id}"}
+
+      context 'when the slideshow exists' do
+        it 'deletes the record' do
+          expect(Slideshow.count).to eq(9)
+        end
+
+        it 'returns status code 204' do
+          expect(response).to have_http_status(204)
+        end
+      end
+      context 'when the slideshow does not exist' do
+        let(:slideshow_id) { 100 }
+
+        it 'returns a missing resource message' do
+          expect(response.body).to match(/Couldn't find Slideshow/)
+          expect(Slideshow.count).to eq(10)
+        end
+
+        it 'returns status code 404' do
+          expect(response).to have_http_status(404)
+        end
+      end
     end
   end
-
 end
-
