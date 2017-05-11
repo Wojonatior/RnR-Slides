@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe 'Slides API' do
   let!(:slideshow) { create(:slideshow) }
-  let!(:items) { create_list(:slide, 20, slideshow_id: slideshow.id) }
+  let!(:slides) { create_list(:slide, 20, slideshow_id: slideshow.id) }
   let(:slideshow_id) { slideshow.id }
-  let(:slide_id) { items.first.id }
+  let(:slide_id) { slides.first.id }
 
   describe 'GET' do
 
@@ -41,7 +41,8 @@ RSpec.describe 'Slides API' do
           expect(json['id']).to eq(slide_id)
         end
         it 'returns status code 200' do
-          expect(response).to have_http_status(404)
+          expect(response).to have_http_status(200)
+
         end
       end
 
@@ -59,15 +60,31 @@ RSpec.describe 'Slides API' do
 
   end
   describe 'POST' do
+    let(:payload) { { title: "A Slide", slide_type: "title" } }
     before { post "/slideshows/#{slideshow_id}/slides", params: payload}
+
     context '/slideshows/:slideshow_id/slides' do
       context 'with a valid payload' do
-        it 'creates the slide'
-        it 'returns status code 201'
+        it 'creates the slide' do
+          expect(Slideshow.find(slideshow_id).slides.count).to eq(21)
+          expect(Slideshow.find(slideshow_id).slides[20].title).to eq('A Slide')
+          expect(json['title']).to eq('A Slide')
+        end
+
+        it 'returns status code 201' do
+          expect(response).to have_http_status(201)
+        end
       end
+
       context 'with an invalid payload' do
-        it 'returns a failure message'
-        it 'returns status code 422'
+        let(:payload) { { title: "", slide_type: "" } }
+        it 'returns a failure message' do
+          expect(response.body).to match(/Validation failed:/)
+        end
+
+        it 'returns status code 422' do
+          expect(response).to have_http_status(422)
+        end
       end
     end
 

@@ -12,7 +12,7 @@ class SlidesController < ApplicationController
 
   def create
     @slideshow.slides.create!(slide_params)
-    json_response(@slideshow, :created)
+    json_response(@slideshow.slides.last, :created)
   end
 
   def update
