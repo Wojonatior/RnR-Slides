@@ -36,6 +36,6 @@ class SlidesController < ApplicationController
   end
 
   def set_slide
-    @slide = @slideshow.slides.find_by!(id: params[:id]) if @todo
+    @slide = @slideshow.slides.find_by!(id: params[:id]) if @slideshow
   end
 end
