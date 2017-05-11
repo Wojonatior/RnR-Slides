@@ -66,7 +66,11 @@ RSpec.describe 'Slideshows API', type: :request do
 
       context 'with an invalid request' do
         before { post '/slideshows', params: { title: "" } }
-        it 'returns a failure message'
+        it 'returns a failure message' do
+          expect(Slideshow.count).to eq(10)
+          expect(response.body).to match(/Validation failed:/)
+        end
+
         it 'returns status code 422' do
           expect(response).to have_http_status(422)
         end
