@@ -15,6 +15,11 @@ class SlideshowsController < ApplicationController
     json_response(@slideshow, :created)
   end
 
+  def update
+    @slideshow.update!(slideshow_params)
+    head :no_content
+  end
+
 
   private
 

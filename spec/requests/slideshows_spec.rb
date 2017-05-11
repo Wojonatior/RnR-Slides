@@ -75,12 +75,50 @@ RSpec.describe 'Slideshows API', type: :request do
           expect(response).to have_http_status(422)
         end
       end
-
     end
   end
 
   describe 'PUT' do
     describe '/slideshows/:id' do
+      before { put "/slideshows/#{slideshow_id}", params: payload}
+
+      context 'with a valid payload' do
+        let(:payload) { { title: 'My New Title' } }
+
+        context 'when the slideshow exists' do
+          it 'modifies the slideshow' do
+            expect(response.body).to be_empty
+            expect(Slideshow.all[0]['title']).to eq('My New Title')
+          end
+          it 'returns status code 204' do
+            expect(response).to have_http_status(204)
+          end
+        end
+
+        context 'when the slideshow does not exist' do
+          let(:slideshow_id) { 100 }
+
+          it 'returns a missing resource message' do
+            expect(response.body).to match(/Couldn't find Slideshow/)
+          end
+
+          it 'returns status code 404' do
+            expect(response).to have_http_status(404)
+          end
+        end
+      end
+      context 'with an invalid payload' do
+        let(:payload) { { title: '' } }
+
+        it 'returns a failure message' do
+          expect(Slideshow.count).to eq(10)
+          expect(response.body).to match(/Validation failed:/)
+        end
+
+        it 'returns status code 422' do
+          expect(response).to have_http_status(422)
+        end
+      end
     end
   end
 
