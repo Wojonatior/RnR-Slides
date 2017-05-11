@@ -10,7 +10,17 @@ class SlideshowsController < ApplicationController
     json_response(@slideshow)
   end
 
+  def create
+    @slideshow = Slideshow.create!(slideshow_params)
+    json_response(@slideshow, :created)
+  end
+
+
   private
+
+  def slideshow_params
+    params.permit(:title)
+  end
   
   def set_slideshow
     @slideshow = Slideshow.find(params[:id])
