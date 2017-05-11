@@ -30,13 +30,17 @@ RSpec.describe 'Slideshows API', type: :request do
         it 'returns status code 200' do
           expect(response).to have_http_status(200)
         end
-
       end
 
       context 'when the slideshow does not exist' do
+        let(:slideshow_id) { 100 }
+
         it 'returns a missing resource message' do
+          expect(response.body).to match(/Couldn't find Slideshow/)
         end
+
         it 'returns status code 404' do
+          expect(response).to have_http_status(404)
         end
       end
     end

@@ -3,11 +3,11 @@ class SlideshowsController < ApplicationController
 
   def index
     @slideshows = Slideshow.all
-    render json: @slideshows, status: :ok
+    json_response(@slideshows)
   end
 
   def show
-    render json: @slideshow, status: :ok
+    json_response(@slideshow)
   end
 
   private
