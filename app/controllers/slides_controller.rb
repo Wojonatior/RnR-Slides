@@ -16,7 +16,7 @@ class SlidesController < ApplicationController
   end
 
   def update
-    @slide.update(slide_params)
+    @slide.update!(slide_params)
     head :no_content
   end
 

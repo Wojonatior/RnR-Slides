@@ -91,34 +91,72 @@ RSpec.describe 'Slides API' do
   end
   describe 'PUT' do
     before { put "/slideshows/#{slideshow_id}/slides/#{slide_id}", params: payload }
+    let(:payload) { { title: "New Slide Title" } }
+
     context '/slideshows/:slideshow_id/slides/:slide_id' do
       context 'with an existing slide' do
         context 'with a valid payload' do
-          it 'modifies the slide'
-          it 'returns status code'
+          it 'modifies the slide' do
+            expect(Slideshow.find(slideshow_id).slides.first['title']).to eq("New Slide Title")
+            expect(response.body).to be_empty
+          end
+
+          it 'returns status code' do
+            expect(response).to have_http_status(204)
+          end
         end
         context 'with an invalid payload' do
-          it 'returns a failure message'
-          it 'returns status code 422'
+          let(:payload) { { title: "" } }
+
+          it 'returns a failure message' do
+            expect(response.body).to match(/Validation failed:/)
+          end
+
+          it 'returns status code 422' do
+            expect(response).to have_http_status(422)
+          end
         end
       end
       context 'with a nonexistant slide' do
-        it 'returns a not found message'
-        it 'returns status code 404'
+        let(:slide_id) { 0 }
+
+        it 'returns a not found message' do
+          expect(response.body).to match(/Couldn't find Slide/)
+        end
+        it 'returns status code 404' do
+          expect(response).to have_http_status(404)
+        end
       end
     end
 
   end
   describe 'DELETE' do
     before { delete "/slideshows/#{slideshow_id}/slides/#{slide_id}" }
+
     context '/slideshows/:slideshow_id/slides/:slide_id' do
       context 'with a valid slide id' do
-        it 'deletes the slide'
-        it 'returns status code 204'
+        it 'deletes the slide' do
+          expect(Slideshow.find(slideshow_id).slides.count).to eq(19)
+        end
+
+        it 'returns status code 204' do
+          expect(response).to have_http_status(204)
+        end
       end
       context 'with an invalid slide id' do
-        it 'returns a not found message'
-        it 'returns status code 404'
+        let(:slide_id) { 0 }
+
+        it 'doesn\'t delete anything' do
+          expect(Slideshow.find(slideshow_id).slides.count).to eq(20)
+        end
+
+        it 'returns a not found message' do
+          expect(response.body).to match(/Couldn't find Slide/)
+        end
+
+        it 'returns status code 404' do
+          expect(response).to have_http_status(404)
+        end
       end
     end
   end
