@@ -28,7 +28,7 @@ class SlidesController < ApplicationController
   private
 
   def slide_params
-    params.permit(:title, :slide_type)
+    params.require(:title, :slide_type)
   end
 
   def set_slideshow
