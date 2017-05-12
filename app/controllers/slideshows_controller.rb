@@ -7,7 +7,7 @@ class SlideshowsController < ApplicationController
   end
 
   def show
-    json_response(@slideshow)
+    render :json => @slideshow.to_json(:include => :slides)
   end
 
   def create
