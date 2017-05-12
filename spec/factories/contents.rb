@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :content do |f|
-    f.body "This is some body content"
+    f.body { Faker::Lorem.sentence }
     slide
   end
 end

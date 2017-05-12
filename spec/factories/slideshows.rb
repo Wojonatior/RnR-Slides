@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :slideshow do |f|
-    f.title "My Title"
+    f.title { Faker::Lorem.word }
 
     factory :slideshow_with_slides do
       transient do 
