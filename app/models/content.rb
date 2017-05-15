@@ -1,3 +1,3 @@
 class Content < ApplicationRecord
-  belongs_to :slide
+  belongs_to :slide, touch: true
 end

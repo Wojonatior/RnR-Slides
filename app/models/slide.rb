@@ -1,5 +1,5 @@
 class Slide < ApplicationRecord
-  belongs_to :slideshow
+  belongs_to :slideshow, touch: true
   has_many :contents, dependent: :destroy
   
   VALID_TYPES = %w(title content two-column)
