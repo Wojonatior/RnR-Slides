@@ -39,7 +39,8 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
   #Pulls the requestSpecHelper into all tests in the requests directory
-  config.include RequestSpecHelper, type: :request
+  config.include RequestSpecHelper
+  config.include ControllerSpecHelper
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
