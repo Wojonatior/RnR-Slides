@@ -1,4 +1,4 @@
-lass CreateSlides < ActiveRecord::Migration[5.1]
+class CreateSlides < ActiveRecord::Migration[5.1]
   def change
     create_table :slides do |t|
       t.string :title
