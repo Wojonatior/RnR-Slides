@@ -6,7 +6,7 @@ RSpec.describe 'Slideshows API', type: :request do
 
   describe 'GET' do
     describe '/slideshows' do
-      before {get '/slideshows'}
+      before {get api_prefix('/slideshows')}
 
       it 'returns all slideshows' do
         expect(json).to_not be_empty
@@ -19,7 +19,7 @@ RSpec.describe 'Slideshows API', type: :request do
     end
 
     describe '/slideshows/:id' do
-      before { get "/slideshows/#{slideshow_id}" }
+      before { get api_prefix("/slideshows/#{slideshow_id}") }
 
       context 'when the slideshow exists' do
         it 'returns the slideshow' do
@@ -51,7 +51,7 @@ RSpec.describe 'Slideshows API', type: :request do
       let(:valid_payload) { { title: 'Test Title' } }
 
       context 'with a valid request' do
-        before { post '/slideshows', params: valid_payload }
+        before { post api_prefix('/slideshows'), params: valid_payload }
 
         it 'creates a slideshow' do
           expect(Slideshow.count).to eq(11)
@@ -65,7 +65,7 @@ RSpec.describe 'Slideshows API', type: :request do
       end
 
       context 'with an invalid request' do
-        before { post '/slideshows', params: { title: "" } }
+        before { post api_prefix('/slideshows'), params: { title: "" } }
         it 'returns a failure message' do
           expect(Slideshow.count).to eq(10)
           expect(response.body).to match(/Validation failed:/)
@@ -80,7 +80,7 @@ RSpec.describe 'Slideshows API', type: :request do
 
   describe 'PUT' do
     describe '/slideshows/:id' do
-      before { put "/slideshows/#{slideshow_id}", params: payload}
+      before { put api_prefix("/slideshows/#{slideshow_id}"), params: payload}
 
       context 'with a valid payload' do
         let(:payload) { { title: 'My New Title' } }
@@ -124,7 +124,7 @@ RSpec.describe 'Slideshows API', type: :request do
 
   describe 'DELETE' do
     describe '/slideshows/:id' do
-      before { delete "/slideshows/#{slideshow_id}"}
+      before { delete api_prefix("/slideshows/#{slideshow_id}")}
 
       context 'when the slideshow exists' do
         it 'deletes the record' do

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Slides API' do
+RSpec.describe "Slides Spec" do
   let!(:slideshow) { create(:slideshow) }
   let!(:slides) { create_list(:slide, 20, slideshow_id: slideshow.id) }
   let(:slideshow_id) { slideshow.id }
@@ -8,8 +8,8 @@ RSpec.describe 'Slides API' do
 
   describe 'GET' do
 
-    context '/slideshows/:slideshow_id/slides' do
-      before { get "/slideshows/#{slideshow_id}/slides" }
+    context '/slideshows/:slideshow_id/slides', :focus => true do
+      before { get api_prefix("/slideshows/#{slideshow_id}/slides") }
 
       context 'with a slideshow that exists' do
         it 'returns status code 200' do
@@ -34,7 +34,7 @@ RSpec.describe 'Slides API' do
     end
 
     context '/slideshows/:slideshow_id/slides/:slide_id' do
-      before { get "/slideshows/#{slideshow_id}/slides/#{slide_id}" }
+      before { get api_prefix("/slideshows/#{slideshow_id}/slides/#{slide_id}") }
 
       context 'with a valid slide id' do
         it 'returns the slide' do
@@ -61,7 +61,7 @@ RSpec.describe 'Slides API' do
   end
   describe 'POST' do
     let(:payload) { { title: "A Slide", slide_type: "title" } }
-    before { post "/slideshows/#{slideshow_id}/slides", params: payload}
+    before { post api_prefix("/slideshows/#{slideshow_id}/slides"), params: payload}
 
     context '/slideshows/:slideshow_id/slides' do
       context 'with a valid payload' do
@@ -90,7 +90,7 @@ RSpec.describe 'Slides API' do
 
   end
   describe 'PUT' do
-    before { put "/slideshows/#{slideshow_id}/slides/#{slide_id}", params: payload }
+    before { put api_prefix("/slideshows/#{slideshow_id}/slides/#{slide_id}"), params: payload }
     let(:payload) { { title: "New Slide Title" } }
 
     context '/slideshows/:slideshow_id/slides/:slide_id' do
@@ -131,7 +131,7 @@ RSpec.describe 'Slides API' do
 
   end
   describe 'DELETE' do
-    before { delete "/slideshows/#{slideshow_id}/slides/#{slide_id}" }
+    before { delete api_prefix("/slideshows/#{slideshow_id}/slides/#{slide_id}") }
 
     context '/slideshows/:slideshow_id/slides/:slide_id' do
       context 'with a valid slide id' do
