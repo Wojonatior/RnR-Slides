@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   scope :api do
     scope :v1 do
       post 'auth/login', to: 'api/v1/authentication#authenticate'
+      post 'signup', to: 'users#create'
       resources :slideshows do
         resources :slides
       end
