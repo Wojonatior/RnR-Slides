@@ -1,12 +1,11 @@
 Rails.application.routes.draw do
   ActiveAdmin.routes(self)
-  namespace :api do
-    namespace :v1 do
+  scope :api do
+    scope :v1 do
+      post 'auth/login', to: 'api/v1/authentication#authenticate'
       resources :slideshows do
         resources :slides
       end
     end
-    #match 'v:api/*path', :to => redirect("/api/v2/%{path}")
-    #match '*path', :to => redirect("/api/v2/%{path}")
   end
 end
