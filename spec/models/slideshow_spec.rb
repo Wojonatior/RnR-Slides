@@ -10,8 +10,6 @@ RSpec.describe Slideshow, :type => :model do
     it "is not valid without a title" do 
       FactoryGirl.build(:slideshow, title: "").should_not be_valid
     end
-
-    it "is not valid without slides"
   end
 
   describe "Associations" do

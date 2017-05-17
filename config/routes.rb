@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       resources :slideshows do
         resources :slides
       end
-      post 'auth/login', to: 'api/v1/authentication#authenticate'
+      post 'auth/login', to: 'authentication#authenticate'
       post 'signup', to: 'users#create'
     end
   end

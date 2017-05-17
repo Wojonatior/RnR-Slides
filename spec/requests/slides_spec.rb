@@ -1,15 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe "Slides Spec" do
+  let(:user) { create(:user) }
   let!(:slideshow) { create(:slideshow) }
   let!(:slides) { create_list(:slide, 20, slideshow_id: slideshow.id) }
   let(:slideshow_id) { slideshow.id }
   let(:slide_id) { slides.first.id }
+  let(:headers){ valid_headers }
 
   describe 'GET' do
-
-    context '/slideshows/:slideshow_id/slides', :focus => true do
-      before { get api_prefix("/slideshows/#{slideshow_id}/slides") }
+    context '/slideshows/:slideshow_id/slides' do
+      before { get api_prefix("/slideshows/#{slideshow_id}/slides"), params: {}, headers: headers }
 
       context 'with a slideshow that exists' do
         it 'returns status code 200' do
@@ -34,7 +35,7 @@ RSpec.describe "Slides Spec" do
     end
 
     context '/slideshows/:slideshow_id/slides/:slide_id' do
-      before { get api_prefix("/slideshows/#{slideshow_id}/slides/#{slide_id}") }
+      before { get api_prefix("/slideshows/#{slideshow_id}/slides/#{slide_id}"), params: {}, headers: headers }
 
       context 'with a valid slide id' do
         it 'returns the slide' do
@@ -59,9 +60,10 @@ RSpec.describe "Slides Spec" do
     end
 
   end
+
   describe 'POST' do
-    let(:payload) { { title: "A Slide", slide_type: "title" } }
-    before { post api_prefix("/slideshows/#{slideshow_id}/slides"), params: payload}
+    before { post api_prefix("/slideshows/#{slideshow_id}/slides"), params: payload, headers: headers }
+    let(:payload) { { title: "A Slide", slide_type: "title" }.to_json }
 
     context '/slideshows/:slideshow_id/slides' do
       context 'with a valid payload' do
@@ -77,7 +79,7 @@ RSpec.describe "Slides Spec" do
       end
 
       context 'with an invalid payload' do
-        let(:payload) { { title: "", slide_type: "" } }
+        let(:payload) { { title: "", slide_type: "" }.to_json }
         it 'returns a failure message' do
           expect(response.body).to match(/Validation failed:/)
         end
@@ -89,9 +91,10 @@ RSpec.describe "Slides Spec" do
     end
 
   end
+
   describe 'PUT' do
-    before { put api_prefix("/slideshows/#{slideshow_id}/slides/#{slide_id}"), params: payload }
-    let(:payload) { { title: "New Slide Title" } }
+    before { put api_prefix("/slideshows/#{slideshow_id}/slides/#{slide_id}"), params: payload, headers: headers}
+    let(:payload) { { title: "New Slide Title" }.to_json }
 
     context '/slideshows/:slideshow_id/slides/:slide_id' do
       context 'with an existing slide' do
@@ -106,7 +109,7 @@ RSpec.describe "Slides Spec" do
           end
         end
         context 'with an invalid payload' do
-          let(:payload) { { title: "" } }
+          let(:payload) { { title: "" }.to_json }
 
           it 'returns a failure message' do
             expect(response.body).to match(/Validation failed:/)
@@ -128,11 +131,11 @@ RSpec.describe "Slides Spec" do
         end
       end
     end
-
   end
-  describe 'DELETE' do
-    before { delete api_prefix("/slideshows/#{slideshow_id}/slides/#{slide_id}") }
 
+  describe 'DELETE' do
+    before { delete api_prefix("/slideshows/#{slideshow_id}/slides/#{slide_id}"), params: {}, headers: headers}
+ 
     context '/slideshows/:slideshow_id/slides/:slide_id' do
       context 'with a valid slide id' do
         it 'deletes the slide' do
