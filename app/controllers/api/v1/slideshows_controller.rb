@@ -3,6 +3,8 @@ module Api::V1
     before_action :set_slideshow, only: [:show, :update, :destroy]
 
     def index
+      # The option to only return slideshows that belong to a user is also here
+      # @slideshows = current_user.slideshows
       @slideshows = Slideshow.all
       json_response(@slideshows)
     end

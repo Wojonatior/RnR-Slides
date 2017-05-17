@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe 'Slideshows API', type: :request do
+  let(:user) { create(:user) }
   let!(:slideshows) { create_list(:slideshow, 10)}
   let(:slideshow_id) { slideshows.first.id }
+  let(:headers){ valid_headers }
 
   describe 'GET' do
     describe '/slideshows' do
-      before {get api_prefix('/slideshows')}
+      before { get api_prefix('/slideshows'), params:{}, headers: headers }
 
       it 'returns all slideshows' do
         expect(json).to_not be_empty
@@ -19,7 +21,7 @@ RSpec.describe 'Slideshows API', type: :request do
     end
 
     describe '/slideshows/:id' do
-      before { get api_prefix("/slideshows/#{slideshow_id}") }
+      before { get api_prefix("/slideshows/#{slideshow_id}") , params:{}, headers: headers }
 
       context 'when the slideshow exists' do
         it 'returns the slideshow' do
@@ -48,10 +50,10 @@ RSpec.describe 'Slideshows API', type: :request do
 
   describe 'POST' do
     describe '/slideshows' do
-      let(:valid_payload) { { title: 'Test Title' } }
+      let(:valid_payload) { { title: 'Test Title', created_by: user.id.to_s }.to_json }
 
       context 'with a valid request' do
-        before { post api_prefix('/slideshows'), params: valid_payload }
+        before { post api_prefix('/slideshows'), params: valid_payload, headers: headers }
 
         it 'creates a slideshow' do
           expect(Slideshow.count).to eq(11)
@@ -65,7 +67,7 @@ RSpec.describe 'Slideshows API', type: :request do
       end
 
       context 'with an invalid request' do
-        before { post api_prefix('/slideshows'), params: { title: "" } }
+        before { post api_prefix('/slideshows'), params: { title: "" }.to_json, headers: headers }
         it 'returns a failure message' do
           expect(Slideshow.count).to eq(10)
           expect(response.body).to match(/Validation failed:/)
@@ -80,10 +82,10 @@ RSpec.describe 'Slideshows API', type: :request do
 
   describe 'PUT' do
     describe '/slideshows/:id' do
-      before { put api_prefix("/slideshows/#{slideshow_id}"), params: payload}
+      before { put api_prefix("/slideshows/#{slideshow_id}"), params: payload, headers: headers }
 
       context 'with a valid payload' do
-        let(:payload) { { title: 'My New Title' } }
+        let(:payload) { { title: 'My New Title' }.to_json }
 
         context 'when the slideshow exists' do
           it 'modifies the slideshow' do
@@ -108,7 +110,7 @@ RSpec.describe 'Slideshows API', type: :request do
         end
       end
       context 'with an invalid payload' do
-        let(:payload) { { title: '' } }
+        let(:payload) { { title: '' }.to_json }
 
         it 'returns a failure message' do
           expect(Slideshow.count).to eq(10)
@@ -124,7 +126,7 @@ RSpec.describe 'Slideshows API', type: :request do
 
   describe 'DELETE' do
     describe '/slideshows/:id' do
-      before { delete api_prefix("/slideshows/#{slideshow_id}")}
+      before { delete api_prefix("/slideshows/#{slideshow_id}"), params: {}, headers: headers }
 
       context 'when the slideshow exists' do
         it 'deletes the record' do

@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
   ActiveAdmin.routes(self)
-  scope :api do
-    scope :v1 do
-      post 'auth/login', to: 'api/v1/authentication#authenticate'
-      post 'signup', to: 'users#create'
+  namespace :api do
+    namespace :v1 do
       resources :slideshows do
         resources :slides
       end
+      post 'auth/login', to: 'api/v1/authentication#authenticate'
+      post 'signup', to: 'users#create'
     end
   end
 end
